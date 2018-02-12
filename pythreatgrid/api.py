@@ -120,11 +120,102 @@ class ThreatGrid(object):
         if type not in self.sample_types:
             raise ThreatGridError('Invalid Sample Type')
         if before is None:
-            before = datetime.now().strftime('%Y-%m-%d')
+            before = (datetime.now() + timedelta(days=1)).strftime('%Y-%m-%d')
         if after is None:
             after = (datetime.now() - timedelta(days=365)).strftime('%Y-%m-%d')
         params = {type: query, 'org_only': org_only, 'user_only': user_only, 'before': before, 'after': after}
         return self._request('samples', params)['data']
 
-    def submit(self):
-        raise NotImplemented()
+    def get_sample_summary(self, sample_id):
+        """
+        Get the summary of analysis information (hash, type...)
+
+        Parameters
+        ----------
+        sample_id: str
+            id of the sample
+
+        Returns
+        -------
+        dict
+        """
+        return self._request('samples/%s/summary' % sample_id, {})['data']
+
+    def get_sample_threats(self, sample_id):
+        """
+        Get the summary of threats related to the malware
+
+        Parameters
+        ----------
+        sample_id: str
+            id of the sample
+
+        Returns
+        -------
+        dict
+        """
+        return self._request('samples/%s/threat' % sample_id, {})['data']
+
+    def get_sample_file(self, sample_id):
+        """
+        Get the sample file
+
+        Parameters
+        ----------
+        sample_id: str
+            id of the sample
+
+        Returns
+        -------
+        file data (encrypted zip)
+        """
+        params = {'api_key': self.key}
+        r = requests.get(self.base_url + 'samples/%s/sample.zip' % sample_id, params=params)
+        if r.status_code != 200:
+            raise ThreatGridError('Bad HTTP Status Code %i' % r.status_code)
+        return r.text
+
+    def get_sample_iocs(self, sample_id):
+        """
+        Get the indicators related to the sample
+
+        Parameters
+        ----------
+        sample_id: str
+            id of the sample
+
+        Returns
+        -------
+        dict
+        """
+        return self._request('samples/%s/analysis/iocs' % sample_id, {})['data']
+
+    def get_sample_analysis(self, sample_id):
+        """
+        Get the full analysis information for the sample
+
+        Parameters
+        ----------
+        sample_id: str
+            id of the sample
+
+        Returns
+        -------
+        dict
+        """
+        return self._request('samples/%s/analysis.json' % sample_id, {})
+
+    def get_sample_processes(self, sample_id):
+        """
+        Get process information for the sample
+
+        Parameters
+        ----------
+        sample_id: str
+            id of the sample
+
+        Returns
+        -------
+        dict
+        """
+        return self._request('samples/%s/processes.json' % sample_id, {})
