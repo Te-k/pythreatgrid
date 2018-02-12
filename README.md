@@ -22,3 +22,12 @@ samples = tg.search_samples('google.com', type='domain')
 for sample in samples['items']:
     iocs = tg.get_sample_iocs(sample['id'])
 ```
+
+## Documentation
+
+```
+cd docs/build/html
+python -m http.server 8000
+```
+
+Then visit http://localhost:8000/pythreatgrid.html#module-pythreatgrid

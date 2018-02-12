@@ -1,5 +1,4 @@
 import requests
-import os
 from datetime import datetime, timedelta
 
 
@@ -89,8 +88,20 @@ class ThreatGrid(object):
             params['after'] = after.strftime('%Y-%m-%%d')
         return self._request('samples/search', params)['data']
 
-
     def get_analysis(self, sample_id):
+        """
+        Get detailed analysis information
+
+        Parameters
+        ----------
+        sample_id: str
+            Sample id
+
+        Returns
+        -------
+        Return a dict containing analysis information
+
+        """
         return self._request('sample/%i/analysis.json' % sample_id, {})
 
     def get_sample(self, query, type='md5', before=None, after=None, org_only=False, user_only=False):
