@@ -1,11 +1,16 @@
-# pythreatgrid
+# pythreatgrid2
 
 Python 3 wrapper for the Threat Grid API
 
+Renamed as `pythreatgrid2` because there is now another library that seems pretty good, [pythreagrid](https://github.com/RustyBower/pythreatgrid)
+
 ## Install
 
+Install from pypi : `pip install pythreatgrid2`
+
+Or install it manually :
 ```
-git clone https://github.com/Te-k/pythreatgrid.git
+git clone https://github.com/Te-k/pythreatgrid2.git
 cd pythreatgrid
 pip install .
 ```
@@ -14,7 +19,7 @@ pip install .
 
 Get indicators for all samples connecting to a domain:
 ```py
-from pythreatgrid import ThreatGrid, ThreatGridError
+from pythreatgrid2 import ThreatGrid, ThreatGridError
 
 key = ''
 tg = ThreatGrid(KEY)
